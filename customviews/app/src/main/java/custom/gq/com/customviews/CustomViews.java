@@ -9,7 +9,6 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
-import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
@@ -18,7 +17,7 @@ import android.widget.Toast;
 /**
  * Created by gaoqun on 2016/6/14.
  */
-public class CustomViews extends View implements View.OnClickListener {
+public class CustomViews extends View{
 
     private Paint mPaint;
 
@@ -129,17 +128,8 @@ public class CustomViews extends View implements View.OnClickListener {
         canvas.drawLine(100, 100, 300, 300, mPaint);
         canvas.drawRoundRect(100, 100, 400, 400, 30, 30, mPaint);
         Toast.makeText(getContext(), "" + canvas.getSaveCount(), Toast.LENGTH_LONG).show();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                canvas.restore();
-            }
-        }, 2000);
+
         super.onDraw(canvas);
     }
 
-    @Override
-    public void onClick(View v) {
-
-    }
 }
