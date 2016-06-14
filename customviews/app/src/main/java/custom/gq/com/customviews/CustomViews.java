@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Picture;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 public class CustomViews extends View{
 
     private Paint mPaint;
+    private Picture mPicture;
 
     public CustomViews(Context context) {
         super(context, null);
@@ -37,6 +39,12 @@ public class CustomViews extends View{
     }
 
     private void init() {
+        /**
+         * draw(canvas) / drawpicture() / drawdrawable()
+         * draw()方法在低版本不兼容 不推荐使用
+         */
+
+
         mPaint = new Paint();
         mPaint.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         //抗锯齿
@@ -45,8 +53,18 @@ public class CustomViews extends View{
          * 填充
          * e.g. Paint.Style.FILL/STROKE/STROKE&&FILL
          */
-        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStyle(Paint.Style.FILL);
         mPaint.setStrokeWidth(10);
+        //picture 讲canvas绘制的内容录制到Picture中，不会显示
+        mPicture = new Picture();
+
+        Canvas canvas1 = mPicture.beginRecording(500,500);
+        canvas1.drawColor(Color.BLUE);
+        mPaint.setColor(Color.BLACK);
+        canvas1.drawRect(0,0,500,500,mPaint);
+        mPicture.endRecording();
+
+
     }
 
     @Override
@@ -57,7 +75,11 @@ public class CustomViews extends View{
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onDraw(final Canvas canvas) {
-        canvas.drawColor(Color.BLUE);
+//        mPicture.draw(canvas);不推荐使用 低版本不兼容
+        canvas.drawPicture(mPicture);
+
+        mPaint.setStyle(Paint.Style.STROKE);
+
 
 
         Rect sRect = new Rect(0, 0, 100, 100);
@@ -128,6 +150,8 @@ public class CustomViews extends View{
         canvas.drawLine(100, 100, 300, 300, mPaint);
         canvas.drawRoundRect(100, 100, 400, 400, 30, 30, mPaint);
         Toast.makeText(getContext(), "" + canvas.getSaveCount(), Toast.LENGTH_LONG).show();
+
+
 
         super.onDraw(canvas);
     }
