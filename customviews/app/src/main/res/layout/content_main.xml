@@ -13,8 +13,9 @@
     tools:context="custom.gq.com.customviews.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <TextView
+    <custom.gq.com.customviews.CustomViews
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"/>
+        android:text="Hello World!"
+        android:id="@+id/custom"/>
 </RelativeLayout>
