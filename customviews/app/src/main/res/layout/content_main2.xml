@@ -10,12 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="custom.gq.com.customviews.MainActivity"
-    tools:showIn="@layout/app_bar_main"
-    android:id="@+id/rl">
+    tools:context="custom.gq.com.customviews.Main2Activity"
+    tools:showIn="@layout/activity_main2">
 
-   <!-- <custom.gq.com.customviews.CubicCustomView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/custom"/>-->
 </RelativeLayout>
