@@ -23,8 +23,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl);
-        CubicCustomView cubicCustomView = new CubicCustomView(this);
-        relativeLayout.addView(cubicCustomView);
+//        CubicCustomView cubicCustomView = new CubicCustomView(this);
+//        relativeLayout.addView(cubicCustomView);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
