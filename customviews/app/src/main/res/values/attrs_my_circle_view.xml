@@ -6,10 +6,14 @@
         <enum name="round" value="1"/>
     </attr>
     <attr name="src" format="reference"/>
+    <attr name="border_width" format="float"/>
+    <attr name="border_color" format="color"/>
 
     <declare-styleable name="MyCircleImageView">
         <attr name="borderRadius"/>
         <attr name="type"/>
         <attr name="src"/>
+        <attr name="border_width"/>
+        <attr name="border_color"/>
     </declare-styleable>
 </resources>

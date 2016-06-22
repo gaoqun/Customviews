@@ -1,5 +1,6 @@
 package custom.gq.com.customviews;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -25,6 +26,14 @@ public class MainActivity extends AppCompatActivity
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl);
 //        CubicCustomView cubicCustomView = new CubicCustomView(this);
 //        relativeLayout.addView(cubicCustomView);
+        final MyCircleImageView myCircleImageView = (MyCircleImageView)findViewById(R.id.mycircle_image_view);
+        myCircleImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myCircleImageView.setBorderColor(Color.BLACK);
+                myCircleImageView.setBorderWidth(20f);
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

@@ -5,10 +5,13 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.NinePatchDrawable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.ImageView;
@@ -41,6 +44,17 @@ public class MyCircleImageView extends ImageView {
      */
     private int mRadius;
 
+    /**
+     * 圆边宽度
+     */
+    private static final float DEFAULT_BORDER_WIDTH = 10f;
+    private float borderWidth;
+
+    /**
+     * 圆边颜色
+     */
+    private int borderColor = Color.RED;
+
     public MyCircleImageView(Context context) {
         super(context);
         init(null, 0);
@@ -71,6 +85,13 @@ public class MyCircleImageView extends ImageView {
                     break;
                 case R.styleable.MyCircleImageView_type:
                     mType = typedArray.getInt(attr, TYPE_CIRCLE);
+                    break;
+                case R.styleable.MyCircleImageView_border_color:
+                    borderColor = typedArray.getColor(attr, Color.RED);
+                    break;
+                case R.styleable.MyCircleImageView_border_width:
+//                    borderWidth = typedArray.getDimensionPixelSize(attr, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics()));
+                    borderWidth = typedArray.getFloat(attr, DEFAULT_BORDER_WIDTH);
                     break;
                 default:
                     break;
@@ -116,6 +137,10 @@ public class MyCircleImageView extends ImageView {
     protected void onDraw(Canvas canvas) {
 //        super.onDraw(canvas);
 
+        Drawable drawable = getDrawable();
+        if (drawable==null)return;
+        if (drawable.getClass()== NinePatchDrawable.class)return;
+
         switch (mType) {
 
             case TYPE_CIRCLE:
@@ -135,18 +160,24 @@ public class MyCircleImageView extends ImageView {
                 //画图
                 desireCanvas.drawBitmap(mSrc, 0, 0, paint);
                 canvas.drawBitmap(bitmap, 0, 0, null);
+
+                paint.setStyle(Paint.Style.STROKE);
+                paint.setColor(borderColor);
+                paint.setStrokeWidth(borderWidth);
+                RectF rectF = new RectF(0, 0, min, min);
+                canvas.drawArc(rectF, 0, 360, false, paint);
                 break;
             case TYPE_ROUND:
                 final Paint roundPaint = new Paint();
                 roundPaint.setAntiAlias(true);
-                mSrc = Bitmap.createScaledBitmap(mSrc,mWidth,mHeight,false);
-                Bitmap roundBitmap = Bitmap.createBitmap(mWidth,mHeight, Bitmap.Config.ARGB_4444);
+                mSrc = Bitmap.createScaledBitmap(mSrc, mWidth, mHeight, false);
+                Bitmap roundBitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_4444);
                 Canvas roundCanvas = new Canvas(roundBitmap);
-                roundCanvas.drawRoundRect(new RectF(0,0,mWidth,mHeight),mRadius,mRadius,roundPaint);
+                roundCanvas.drawRoundRect(new RectF(0, 0, mWidth, mHeight), mRadius, mRadius, roundPaint);
                 //设置模式
                 roundPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-                roundCanvas.drawBitmap(mSrc,0,0,roundPaint);
-                canvas.drawBitmap(roundBitmap,0,0,null);
+                roundCanvas.drawBitmap(mSrc, 0, 0, roundPaint);
+                canvas.drawBitmap(roundBitmap, 0, 0, null);
                 break;
             default:
                 break;
@@ -157,4 +188,24 @@ public class MyCircleImageView extends ImageView {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
     }
+
+    public float getBorderWidth() {
+        return borderWidth;
+    }
+
+    public void setBorderWidth(float borderWidth) {
+        this.borderWidth = borderWidth;
+        invalidate();
+    }
+
+    public int getBorderColor() {
+        return borderColor;
+    }
+
+    public void setBorderColor(int borderColor) {
+        this.borderColor = borderColor;
+        invalidate();
+    }
+
 }
+
