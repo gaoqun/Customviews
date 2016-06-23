@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -17,11 +18,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private ObjectAnimator mObjectAnimator;
+    private BottomSheetDialog bottomSheetDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +40,8 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
                 myCircleImageView.setBorderColor(Color.BLACK);
                 myCircleImageView.setBorderWidth(20f);
+                if (bottomSheetDialog!=null)
+                    bottomSheetDialog.show();
             }
         });
 
@@ -47,15 +52,26 @@ public class MainActivity extends AppCompatActivity
             public void onAnimationUpdate(ValueAnimator animation) {
                 float percent = animation.getAnimatedFraction();
                 myCircleImageView.setAlpha(percent);
+
+
             }
         });
         mObjectAnimator.setRepeatCount(100);
         mObjectAnimator.setInterpolator(new DecelerateInterpolator());
         mObjectAnimator.start();
 
+        ImageView imageView = new ImageView(this);
+        imageView.setImageResource(R.mipmap.ic_eg);
+
+
+        bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(imageView);
+        bottomSheetDialog.show();
+
 //        AnimatorSet animatorSet = (AnimatorSet) AnimatorInflater.loadAnimator(MainActivity.this,R.animator.circle_view_animator);
 //        animatorSet.setTarget(myCircleImageView);
 //        animatorSet.start();
+
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -63,7 +79,12 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                        .setAction("Action", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                bottomSheetDialog.show();
+                            }
+                        }).show();
             }
         });
 

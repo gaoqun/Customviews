@@ -12,6 +12,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.widget.ImageView;
 
 /**
@@ -145,11 +146,6 @@ public class MyCircleImageView extends ImageView {
     @Override
     protected void onDraw(Canvas canvas) {
 //        super.onDraw(canvas);
-
-//        Drawable drawable = getDrawable();
-//        if (drawable==null)return;
-//        if (drawable.getClass()== NinePatchDrawable.class)return;
-
         switch (mType) {
 
             case TYPE_CIRCLE:
@@ -216,6 +212,9 @@ public class MyCircleImageView extends ImageView {
         invalidate();
     }
 
-
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
+    }
 }
 

@@ -23,6 +23,7 @@
         android:duration="5000"
         android:valueFrom="0f"
         android:valueTo="360f"
+        android:propertyXName="rotation"
         android:valueType="floatType"
         android:repeatMode="reverse"
         android:repeatCount="-1"
