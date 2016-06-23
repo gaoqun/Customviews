@@ -19,11 +19,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/custom"/>-->
    <custom.gq.com.customviews.MyCircleImageView
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       app:src="@drawable/side_nav_bar"
+       android:layout_width="100dp"
+       android:layout_height="100dp"
+       app:src="@mipmap/ic_eg"
        app:type="circle"
        app:border_color="@color/colorPrimaryDark"
        app:borderRadius="@dimen/fab_margin"
-       android:id="@+id/mycircle_image_view"/>
+       android:id="@+id/mycircle_image_view"
+       android:layout_centerInParent="true"/>
 </RelativeLayout>

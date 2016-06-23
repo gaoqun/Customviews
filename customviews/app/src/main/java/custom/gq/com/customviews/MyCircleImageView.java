@@ -10,8 +10,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.NinePatchDrawable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.ImageView;
@@ -54,6 +52,17 @@ public class MyCircleImageView extends ImageView {
      * 圆边颜色
      */
     private int borderColor = Color.RED;
+
+    /**
+     * 开始动画
+     *
+     * @param context
+     */
+    private static final int START_LOADING_ANIMATION = 0;
+    /**
+     * 停止动画
+     */
+    private static final int STIO_LOADING_ANIMATION = 1;
 
     public MyCircleImageView(Context context) {
         super(context);
@@ -98,6 +107,7 @@ public class MyCircleImageView extends ImageView {
             }
         }
         typedArray.recycle();
+
     }
 
     @Override
@@ -129,7 +139,6 @@ public class MyCircleImageView extends ImageView {
             } else
                 mHeight = specHeight;
         }
-
         setMeasuredDimension(mWidth, mHeight);
     }
 
@@ -137,9 +146,9 @@ public class MyCircleImageView extends ImageView {
     protected void onDraw(Canvas canvas) {
 //        super.onDraw(canvas);
 
-        Drawable drawable = getDrawable();
-        if (drawable==null)return;
-        if (drawable.getClass()== NinePatchDrawable.class)return;
+//        Drawable drawable = getDrawable();
+//        if (drawable==null)return;
+//        if (drawable.getClass()== NinePatchDrawable.class)return;
 
         switch (mType) {
 
@@ -206,6 +215,7 @@ public class MyCircleImageView extends ImageView {
         this.borderColor = borderColor;
         invalidate();
     }
+
 
 }
 

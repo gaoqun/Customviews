@@ -1,6 +1,9 @@
 package custom.gq.com.customviews;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -13,10 +16,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private ObjectAnimator mObjectAnimator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +39,24 @@ public class MainActivity extends AppCompatActivity
                 myCircleImageView.setBorderWidth(20f);
             }
         });
+
+        mObjectAnimator = ObjectAnimator.ofFloat(myCircleImageView,"rotation",0,360).setDuration(5000);
+        mObjectAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        mObjectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float percent = animation.getAnimatedFraction();
+                myCircleImageView.setAlpha(percent);
+            }
+        });
+        mObjectAnimator.setRepeatCount(100);
+        mObjectAnimator.setInterpolator(new DecelerateInterpolator());
+        mObjectAnimator.start();
+
+//        AnimatorSet animatorSet = (AnimatorSet) AnimatorInflater.loadAnimator(MainActivity.this,R.animator.circle_view_animator);
+//        animatorSet.setTarget(myCircleImageView);
+//        animatorSet.start();
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +85,31 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            mObjectAnimator.resume();
+        }else {
+            if (!mObjectAnimator.isRunning()&&!mObjectAnimator.isStarted())mObjectAnimator.start();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mObjectAnimator.isRunning()) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            mObjectAnimator.pause();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        mObjectAnimator.removeAllListeners();
+        mObjectAnimator.removeAllUpdateListeners();
+        super.onDestroy();
     }
 
     @Override
