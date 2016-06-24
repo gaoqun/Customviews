@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -122,6 +123,13 @@ public class MyCircleImageView extends ImageView {
             /**
              * 根据图片宽度决定
              */
+
+        if (mSrc==null){
+            if (getDrawable() instanceof BitmapDrawable){
+                mSrc = ((BitmapDrawable) getDrawable()).getBitmap();
+            }
+        }
+
             int desireImageWidth = getPaddingLeft() + getPaddingRight() + mSrc.getWidth();
             if (specMode == MeasureSpec.AT_MOST) {//warp_content
                 mWidth = Math.min(desireImageWidth, specWidth);

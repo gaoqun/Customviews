@@ -2,9 +2,11 @@ package custom.gq.com.customviews;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -35,13 +37,25 @@ public class MainActivity extends AppCompatActivity
 //        CubicCustomView cubicCustomView = new CubicCustomView(this);
 //        relativeLayout.addView(cubicCustomView);
         final MyCircleImageView myCircleImageView = (MyCircleImageView)findViewById(R.id.mycircle_image_view);
+//        Glide.with(this).load("http://h.hiphotos.baidu.com/image/pic/item/f9dcd100baa1cd11dd1855cebd12c8fcc2ce2db5.jpg")
+//                .centerCrop().into(myCircleImageView);
+
+        final ImageView imageView = new ImageView(this);
+        imageView.setImageResource(R.mipmap.ic_eg);
+        bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(imageView);
+
         myCircleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 myCircleImageView.setBorderColor(Color.BLACK);
                 myCircleImageView.setBorderWidth(20f);
                 if (bottomSheetDialog!=null)
+                {
+                    if (!bottomSheetDialog.isShowing())
                     bottomSheetDialog.show();
+                    else bottomSheetDialog.dismiss();
+                }
             }
         });
 
@@ -52,27 +66,19 @@ public class MainActivity extends AppCompatActivity
             public void onAnimationUpdate(ValueAnimator animation) {
                 float percent = animation.getAnimatedFraction();
                 myCircleImageView.setAlpha(percent);
-
-
             }
         });
         mObjectAnimator.setRepeatCount(100);
         mObjectAnimator.setInterpolator(new DecelerateInterpolator());
         mObjectAnimator.start();
 
-        ImageView imageView = new ImageView(this);
-        imageView.setImageResource(R.mipmap.ic_eg);
 
-
-        bottomSheetDialog = new BottomSheetDialog(this);
-        bottomSheetDialog.setContentView(imageView);
-        bottomSheetDialog.show();
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE,null);
+        intent.putExtra("EXTRA_QUICK_CAPTURE",true);
 
 //        AnimatorSet animatorSet = (AnimatorSet) AnimatorInflater.loadAnimator(MainActivity.this,R.animator.circle_view_animator);
 //        animatorSet.setTarget(myCircleImageView);
 //        animatorSet.start();
-
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
