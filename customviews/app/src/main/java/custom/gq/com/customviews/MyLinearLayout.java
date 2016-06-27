@@ -51,7 +51,7 @@ public class MyLinearLayout extends LinearLayout {
              *是否能滑动  true代表能滑动  边界值 禁止拖拽
              * @param child
              * @param pointerId
-             * @return
+             * @return  返回true表示可以表捕获该view
              */
             @Override
             public boolean tryCaptureView(View child, int pointerId) {
@@ -101,6 +101,21 @@ public class MyLinearLayout extends LinearLayout {
                 mViewDragHelper.captureChildView(mEdgeTrackerView,pointerId);
             }
 
+            /**
+             * 解决由于可以点击拦截不能对view进行捕获的问题
+             * @param child
+             * @return
+             */
+            @Override
+            public int getViewHorizontalDragRange(View child)
+            {
+                return getMeasuredWidth()-child.getMeasuredWidth();
+            }
+
+            @Override
+            public int getViewVerticalDragRange(View child) {
+                return getMeasuredHeight()-child.getMeasuredHeight();
+            }
         });
         /**
          * 边界检测
