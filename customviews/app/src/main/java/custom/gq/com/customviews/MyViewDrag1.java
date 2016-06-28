@@ -1,6 +1,9 @@
 package custom.gq.com.customviews;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
@@ -15,7 +18,9 @@ public class MyViewDrag1 extends FrameLayout {
     private ViewDragHelper mViewDragHelper;
     private View backGroundView;
     private View contentView;
-    private Point autoBackPoint = new Point();
+    private Point autoBackPoint;
+    private Paint mPaint;
+    private Point mPoint;
 
     public MyViewDrag1(Context context) {
         super(context);
@@ -33,11 +38,20 @@ public class MyViewDrag1 extends FrameLayout {
         init();
     }
 
-    private void init() {
-        final float density = getResources().getDisplayMetrics().density;
-        final float minVel = 400 * density;
+    @Override
+    protected void onDraw(Canvas canvas) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
 
-        mViewDragHelper = ViewDragHelper.create(this, 0.01f, new ViewDragHelper.Callback() {
+
+
+
+    }
+
+    private void init() {
+        autoBackPoint = new Point();
+        mPoint = new Point();
+        mViewDragHelper = ViewDragHelper.create(this, 1.0f, new ViewDragHelper.Callback() {
 
             /**
              * only capture the content view
@@ -52,14 +66,16 @@ public class MyViewDrag1 extends FrameLayout {
 
             @Override
             public int clampViewPositionVertical(View child, int top, int dy) {
-//                final int newTop = Math.min(getHeight()/2,Math.max(top,child.getHeight()/2));
-                return top;
+                final int topBound = getPaddingTop();
+                final int bottomBound = getHeight()/3;
+                int newTop = Math.min(Math.max(top, topBound), bottomBound);
+                return newTop;
             }
 
             @Override
             public void onViewReleased(View releasedChild, float xvel, float yvel) {
-                if (releasedChild==contentView){
-                    mViewDragHelper.settleCapturedViewAt(autoBackPoint.x,autoBackPoint.y);
+                if (releasedChild == contentView) {
+                    mViewDragHelper.settleCapturedViewAt(autoBackPoint.x, autoBackPoint.y);
                     invalidate();
                 }
             }
@@ -79,10 +95,9 @@ public class MyViewDrag1 extends FrameLayout {
             public int getViewVerticalDragRange(View child) {
                 return getMeasuredHeight()-child.getMeasuredHeight();
             }*/
-
             @Override
             public void onEdgeDragStarted(int edgeFlags, int pointerId) {
-                mViewDragHelper.captureChildView(contentView,pointerId);
+                mViewDragHelper.captureChildView(contentView, pointerId);
             }
 
             @Override
@@ -90,22 +105,29 @@ public class MyViewDrag1 extends FrameLayout {
                 super.onEdgeTouched(edgeFlags, pointerId);
             }
         });
+//        mViewDragHelper.setMinVelocity(minVel);
+        mViewDragHelper.setEdgeTrackingEnabled(ViewDragHelper.EDGE_TOP);
 
-        mViewDragHelper.setMinVelocity(minVel);
-        mViewDragHelper.setEdgeTrackingEnabled(ViewDragHelper.EDGE_TOP|ViewDragHelper.EDGE_BOTTOM);
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setDither(true);//递色
+    }
 
-
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
     }
 
     @Override
     public void computeScroll() {
         super.computeScroll();
-        if (mViewDragHelper.continueSettling(true))invalidate();
+        if (mViewDragHelper.continueSettling(true)) invalidate();
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (mViewDragHelper.shouldInterceptTouchEvent(ev))return true;
+        if (mViewDragHelper.shouldInterceptTouchEvent(ev)) return true;
         return super.onInterceptTouchEvent(ev);
     }
 
@@ -119,7 +141,7 @@ public class MyViewDrag1 extends FrameLayout {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         autoBackPoint.x = contentView.getLeft();
-        autoBackPoint.y= contentView.getTop();
+        autoBackPoint.y = contentView.getTop();
     }
 
     @Override
@@ -128,4 +150,5 @@ public class MyViewDrag1 extends FrameLayout {
         backGroundView = getChildAt(0);
         contentView = getChildAt(1);
     }
+
 }
