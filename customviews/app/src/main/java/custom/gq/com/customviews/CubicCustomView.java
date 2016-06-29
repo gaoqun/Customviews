@@ -8,7 +8,6 @@ import android.graphics.Path;
 import android.graphics.PointF;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -126,48 +125,6 @@ public class CubicCustomView extends View {
 
 
         return true;
-    }
-
-    private void animationReset() {
-        while (control.x > centerX - 100 || control.x < centerX - 100 ||
-                control2.x > centerX + 100 || control2.x < centerX + 100
-                || control.y < centerY - 100 || control.y > centerY - 100
-                || control2.y < centerY - 100 || control2.y > centerY - 100) {
-
-            Log.d("control.x", control.x + "");
-            Log.d("control.y", control.y + "");
-            Log.d("control2.x", control2.x + "");
-            Log.d("control2.y", control2.y + "");
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (control.x > centerX - 100) {
-                        control.x = control.x - 1;
-                    } else if (control.x < centerX - 100) {
-                        control.x = control.x + 1;
-                    }
-
-                    if (control2.x > centerX + 100) {
-                        control2.x = control2.x - 1;
-                    } else if (control2.x < centerX + 100) {
-                        control2.x = control2.x + 1;
-                    }
-
-                    if (control.y > centerY - 100) {
-                        control.y = control.y - 1;
-                    } else if (control.y < centerY - 100) {
-                        control.y = control.y + 1;
-                    }
-
-                    if (control2.y > centerY - 100) {
-                        control2.y = control.y - 1;
-                    } else if (control2.y < centerY - 100) {
-                        control2.y = control.y + 1;
-                    }
-                    invalidate();
-                }
-            }, 1000);
-        }
     }
 
     @Override
