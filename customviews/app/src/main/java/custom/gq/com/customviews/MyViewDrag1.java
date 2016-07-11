@@ -25,6 +25,7 @@ public class MyViewDrag1 extends FrameLayout {
     private Paint mPaint;
     private PointF start, end, control;
     private int mMaxVerticalRange;
+    private float RATIO = 0.5F;
 
     public MyViewDrag1(Context context) {
         super(context);

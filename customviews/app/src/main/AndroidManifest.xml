@@ -6,7 +6,7 @@
 
     <application
         android:allowBackup="true"
-        android:hardwareAccelerated="false"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -14,7 +14,7 @@
 
         <!-- 关闭硬件加速 -->
         <activity
-            android:name=".Main3Activity"
+            android:name=".Main5Activity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -24,6 +24,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity">
+        </activity>
+        <activity android:name=".Main3Activity">
+        </activity>
+        <activity
+            android:name=".Main4Activity"
+            android:label="@string/title_activity_main5"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 
