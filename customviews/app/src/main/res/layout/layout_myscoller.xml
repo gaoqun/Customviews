@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<custom.gq.com.customviews.MyScrollerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/parent_view"
+    android:scrollbars="none"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <include layout="@layout/layout_header"/>
+
+    </LinearLayout>
+
+</custom.gq.com.customviews.MyScrollerView>
