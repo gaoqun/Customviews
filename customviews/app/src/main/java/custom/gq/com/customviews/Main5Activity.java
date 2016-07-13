@@ -1,15 +1,11 @@
 package custom.gq.com.customviews;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -41,13 +37,7 @@ public class Main5Activity extends AppCompatActivity implements MyBlowLayout.Pul
         });
 
         mMyBlowLayout.setPullDownToRefresh(this);
-
-        WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-        int screenWidth = displayMetrics.widthPixels;
-        int screenHeight = displayMetrics.heightPixels;
-        Log.d("screen==","screenWidth="+screenWidth+"\n"+"screenHeight="+screenHeight);
+        mMyBlowLayout.reset();
     }
 
     @Override

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="custom.gq.com.customviews.Main5Activity">
+    tools:context="custom.gq.com.customviews.Main5Activity"
+    >
 
     <include layout="@layout/content_main5"/>
 

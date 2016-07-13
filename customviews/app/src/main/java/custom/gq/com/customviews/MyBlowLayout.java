@@ -4,9 +4,12 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -55,6 +58,8 @@ public class MyBlowLayout extends FrameLayout {
 
     private TYPE mTYPE = TYPE.NORMAL;
 
+    private LinearLayout linearLayout;
+
     private View header;
     private View content;
     private int headerHeight;
@@ -90,6 +95,26 @@ public class MyBlowLayout extends FrameLayout {
 
     }
 
+    public void reset() {
+        if (linearLayout != null) {
+            scrollTo(0, getScreenHeight() / 8);
+            invalidate();
+            mScrollerCompat.setFinalY(getScreenHeight() / 8);
+        }
+    }
+
+    private int getDefautHeight() {
+        Log.d("****", getScreenHeight() / 8 + "");
+        return getScreenHeight() / 8;
+    }
+
+    public int getScreenHeight() {
+        WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.heightPixels;
+    }
+
     @Override
     public void computeScroll() {
         if (mScrollerCompat.computeScrollOffset()) {
@@ -102,8 +127,10 @@ public class MyBlowLayout extends FrameLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        LinearLayout linearLayout = (LinearLayout) getChildAt(0);
+        linearLayout = (LinearLayout) getChildAt(0);
         header = linearLayout.findViewById(R.id.header);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getScreenHeight() / 8);
+        header.setLayoutParams(layoutParams);
         content = linearLayout.findViewById(R.id.imageview);
 
     }
@@ -128,63 +155,39 @@ public class MyBlowLayout extends FrameLayout {
                 if (offsetY > 0) {
                     Log.d(mTAG, "pull up");
                     mTYPE = TYPE.DRAGUP;
-                    float damp = 1 - offsetY / getMeasuredHeight();
-                    offsetY = offsetY * damp;
+//                    float damp = 1 - offsetY / (getScreenHeight()/8);
+//                    if (damp>=0){
+//                        offsetY = offsetY * damp;
                     endY = mScrollerCompat.getFinalY() - (int) offsetY;
-                    Log.d("endY",""+endY);
-                    if (offsetY != 0) {
-                        scrollTo(0, -(int) endY);
-                    }
-                } else {
+                    Log.d("endY", "" + endY);
+                    scrollTo(0, -(int) endY);
+//                    }
+                } else if (offsetY < 0) {
                     Log.d(mTAG, "pull down");
                     mTYPE = TYPE.DRAGdOWN;
                     //设置阻尼效果
-                    float damp = 1 + offsetY / getMeasuredHeight();
-                    offsetY = offsetY * damp;
+//                    float damp = 1 + offsetY / (getScreenHeight()/8);
+//                    if (damp>=0){
+//                        offsetY = offsetY * damp;
                     endY = mScrollerCompat.getFinalY() + (int) offsetY;
-                    if (offsetY != 0) {
-                        scrollTo(0, (int) endY);
-                    }
+                    scrollTo(0, (int) endY);
+//                    }
                 }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                mScrollerCompat.setFinalY((int) endY);
-                int finalY = mScrollerCompat.getFinalY();
+
                 switch (mTYPE) {
                     case DRAGUP:
-                        if (finalY>StateViewHeight)
-                        {
-                            mScrollerCompat.startScroll(0,finalY,0,finalY-StateViewHeight,300);
-                            mScrollerCompat.setFinalY(StateViewHeight);
-                            sHandler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mScrollerCompat.startScroll(0, StateViewHeight, 0, StateViewHeight, 300);
-                                    mPullDownToRefresh.refresh(true);
-                                }
-                            },300);
-                        }else {
-                            this.mPullDownToRefresh.refresh(false);
-                            mScrollerCompat.startScroll(0, -finalY, 0, finalY, 300);
-                        }
-
+                        mScrollerCompat.setFinalY((int) endY);
+                        int finalY = mScrollerCompat.getFinalY();
+                        this.mPullDownToRefresh.refresh(false);
+                        mScrollerCompat.startScroll(0, -finalY, 0, finalY, 300);
                         break;
                     case DRAGdOWN:
-                        if (finalY < -StateViewHeight) {
-                            mScrollerCompat.startScroll(0, finalY, 0, finalY + StateViewHeight, 300);
-                            mScrollerCompat.setFinalY(-StateViewHeight);
-                            sHandler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mScrollerCompat.startScroll(0, -StateViewHeight, 0, StateViewHeight, 300);
-                                    mPullDownToRefresh.refresh(true);
-                                }
-                            }, 500);
-                        } else {
-                            this.mPullDownToRefresh.refresh(false);
-                            mScrollerCompat.startScroll(0, finalY, 0, -finalY, 300);
-                        }
+                        mScrollerCompat.setFinalY((int) endY);
+                        finalY = mScrollerCompat.getFinalY();
+                        mScrollerCompat.startScroll(0, finalY, 0, -(finalY - getDefautHeight()), 300);
                         break;
                     default:
                         break;

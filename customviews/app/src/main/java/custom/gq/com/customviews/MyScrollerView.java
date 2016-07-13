@@ -1,6 +1,8 @@
 package custom.gq.com.customviews;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -16,7 +18,8 @@ import android.widget.Scroller;
 /**
  * Created by gaoqun on 2016/7/12.
  */
-public class MyScrollerView extends ScrollView {
+@TargetApi(Build.VERSION_CODES.M)
+public class MyScrollerView extends ScrollView implements View.OnScrollChangeListener {
 
 
     private Scroller mScroller;
@@ -80,11 +83,9 @@ public class MyScrollerView extends ScrollView {
             footer.setLayoutParams(layoutParams);
             this.parent.addView(footer);
         }
-
     }
 
     public void resetState() {
-        parent.setFocusable(true);
         scrollTo(0, 240);
         invalidate();
         mScroller.setFinalY(240);
@@ -100,11 +101,36 @@ public class MyScrollerView extends ScrollView {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+    {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int count = getChildCount();
+        for (int i = 0; i < count; ++i)
+        {
+            View childView = getChildAt(i);
+            measureChild(childView, widthMeasureSpec,heightMeasureSpec);
+        }
+    }
+
+
+    @Override
     protected void onFinishInflate() {
         parent = (LinearLayout) getChildAt(0);
         header = parent.getChildAt(0);
         header.setLayoutParams(layoutParams);
         super.onFinishInflate();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (!onInterceptTouchEvent(ev)) {
+            int childCount = getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View child = getChildAt(i);
+                if (child.dispatchTouchEvent(ev)) return true;
+            }
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
     /**
@@ -118,19 +144,20 @@ public class MyScrollerView extends ScrollView {
      */
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (mState == State.PULL_DOWN) {
-            return false;
-        }
-        return true;
+        return super.onInterceptTouchEvent(ev);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        switch (ev.getAction()) {
+        switch (ev.getAction()/*&MotionEvent.ACTION_MASK*/) {
             case MotionEvent.ACTION_DOWN:
                 startY = ev.getY();
                 break;
             case MotionEvent.ACTION_MOVE:
+                if (!mScroller.isFinished()) {
+                    mScroller.abortAnimation();
+                    mState = State.NOMAL;
+                }
                 offset = 0;
                 currentY = ev.getY();
                 offset = startY - currentY;
@@ -159,6 +186,10 @@ public class MyScrollerView extends ScrollView {
                         break;
                 }
                 break;
+            /*case MotionEvent.ACTION_POINTER_DOWN:
+            case MotionEvent.ACTION_POINTER_UP:
+                if (!mScroller.isFinished()) mScroller.forceFinished(true);
+                break;*/
             default:
                 break;
         }
@@ -173,4 +204,8 @@ public class MyScrollerView extends ScrollView {
         return displayMetrics.heightPixels;
     }
 
+    @Override
+    public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+    }
 }

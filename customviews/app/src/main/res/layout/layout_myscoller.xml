@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<custom.gq.com.customviews.MyScrollerView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/parent_view"
-    android:scrollbars="none"
-    android:fillViewport="true">
+    android:orientation="vertical"
+    android:background="@android:color/holo_blue_light">
 
-    <LinearLayout
+    <custom.gq.com.customviews.MyScrollerView
+        android:id="@+id/parent_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:background="@android:color/darker_gray">
 
-        <include layout="@layout/layout_header"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@android:color/darker_gray">
 
-    </LinearLayout>
+            <include layout="@layout/layout_header"/>
 
-</custom.gq.com.customviews.MyScrollerView>
+        </LinearLayout>
+
+    </custom.gq.com.customviews.MyScrollerView>
+</LinearLayout>
+
